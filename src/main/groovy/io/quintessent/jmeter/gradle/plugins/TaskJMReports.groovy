@@ -1,8 +1,8 @@
-package net.foragerr.jmeter.gradle.plugins
+package io.quintessent.jmeter.gradle.plugins
+
 
 import kg.apc.jmeter.PluginsCMDWorker
-import net.foragerr.jmeter.gradle.plugins.utils.JMUtils
-import net.foragerr.jmeter.gradle.plugins.utils.ReportTransformer
+import io.quintessent.jmeter.gradle.plugins.utils.JMUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.io.IOUtils
 import org.apache.jmeter.util.JMeterUtils
@@ -111,8 +111,8 @@ public class TaskJMReports extends DefaultTask {
 
     private void makeHTMLReport(List<File> results) {
         try {
-            ReportTransformer transformer;
-            transformer = new ReportTransformer(getXslt());
+            io.quintessent.jmeter.gradle.plugins.utils.ReportTransformer transformer;
+            transformer = new io.quintessent.jmeter.gradle.plugins.utils.ReportTransformer(getXslt());
             log.info("Building HTML Report.");
 			for (File resultFile : results) {
 				String reportTitle = project.jmeter.reportTitle ?: "Generated from: " + resultFile.getName();

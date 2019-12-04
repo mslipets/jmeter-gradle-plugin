@@ -1,4 +1,4 @@
-package net.foragerr.jmeter.gradle.plugins.utils
+package io.quintessent.jmeter.gradle.plugins.utils
 
 import org.gradle.api.GradleException
 import java.io.BufferedReader

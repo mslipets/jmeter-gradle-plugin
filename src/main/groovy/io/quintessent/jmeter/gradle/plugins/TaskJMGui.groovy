@@ -1,7 +1,7 @@
-package net.foragerr.jmeter.gradle.plugins
+package io.quintessent.jmeter.gradle.plugins
 
-import net.foragerr.jmeter.gradle.plugins.utils.JMUtils
-import net.foragerr.jmeter.gradle.plugins.worker.JMeterRunner
+import io.quintessent.jmeter.gradle.plugins.utils.JMUtils
+import io.quintessent.jmeter.gradle.plugins.worker.JMeterRunner
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.logging.Logger
