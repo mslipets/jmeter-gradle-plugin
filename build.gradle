@@ -11,10 +11,10 @@ apply plugin: 'maven-publish'
 
 
 //--- Project information ---
-group = 'net.foragerr.jmeter'
+group = 'io.quintessent.jmeter'
 archivesBaseName = 'jmeter-gradle-plugin'
 
-ext.thisPluginVersion="1.1.1"
+ext.thisPluginVersion="1.1.2"
 ext.jmVersion = "5.0"
 ext.jmPluginVersion = "1.4.0"
 version = "$thisPluginVersion-$jmVersion-SNAPSHOT"
@@ -147,24 +147,15 @@ processResources.doLast {
 //--- mvn-publish ---
 def pomConfig = {
 	scm {
-		url 'scm:git@github.com:jmeter-gradle-plugin/jmeter-gradle-plugin.git'
-		connection 'scm:git@github.com:jmeter-gradle-plugin/jmeter-gradle-plugin.git'
-		developerConnection 'scm:git@github.com:jmeter-gradle-plugin/jmeter-gradle-plugin.git'
+		url 'scm:git@github.com:noelob/jmeter-gradle-plugin.git'
+		connection 'scm:git@github.com:noelob/jmeter-gradle-plugin.git'
+		developerConnection 'scm:git@github.com:noelob/jmeter-gradle-plugin.git'
 	}
 	licenses {
 		license {
 			name 'The Apache Software License, Version 2.0'
 			url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
 			distribution 'repo'
-		}
-	}
-	developers {
-		developer {
-			id 'foragerr'
-			name 'RaGe'
-			url 'http://jmeter.foragerr.net'
-			email 'foragerr@gmail.com'
-			roles { role 'Developer' }
 		}
 	}
 }
@@ -216,14 +207,14 @@ bintray {
     publications = ['mavenJava'] //When uploading Maven-based publication files
     publish = true //If version should be auto published after an upload
     pkg {
-        repo = "jmeter"
+        repo = "gradle-plugins"
         name = "$archivesBaseName"
-        userOrg = "$archivesBaseName" 
+        userOrg = "noelob"
         licenses = ['Apache-2.0']
         publicDownloadNumbers = true
-        websiteUrl = 'http://jmeter.foragerr.net'
-        issueTrackerUrl = 'https://github.com/jmeter-gradle-plugin/jmeter-gradle-plugin/issues'
-        vcsUrl = 'https://github.com/jmeter-gradle-plugin/jmeter-gradle-plugin.git'
+        websiteUrl = 'https://github.com/noelob/jmeter-gradle-plugin'
+        issueTrackerUrl = 'https://github.com/noelob/jmeter-gradle-plugin/issues'
+        vcsUrl = 'https://github.com/noelob/jmeter-gradle-plugin.git'
 
         version {
             name = project.version //Bintray logical version name
@@ -247,14 +238,14 @@ publishPlugins.onlyIf {
 	!(version ==~ /.*SNAPSHOT/)
 }
 pluginBundle {
-    website = 'http://jmeter.foragerr.net'
-    vcsUrl = 'https://github.com/jmeter-gradle-plugin/jmeter-gradle-plugin.git'
+    website = 'https://github.com/noelob/jmeter-gradle-plugin'
+    vcsUrl = 'https://github.com/noelob/jmeter-gradle-plugin.git'
     description = 'A Gradle plugin for running JMeter tests'
     tags = ['jmeter', 'performance']
 
     plugins {
         jmeterPlugin {
-          id = 'net.foragerr.jmeter'
+          id = 'io.quintessent.jmeter'
           displayName = 'JMeter Gradle Plugin'
       }
     }
