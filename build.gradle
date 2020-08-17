@@ -1,40 +1,50 @@
 //--- Plugins ---
 plugins {
     id "com.jfrog.bintray" version "1.8.4"
-	id "com.jfrog.artifactory" version "4.7.5"
-	id "com.gradle.plugin-publish" version "0.10.0"
+    id "com.jfrog.artifactory" version "4.7.5"
+    id "com.gradle.plugin-publish" version "0.10.0"
     id 'com.github.ben-manes.versions' version '0.20.0'
+    id "java-gradle-plugin"
+    id 'groovy'
+    id 'maven-publish'
 }
-
-apply plugin: 'groovy'
-apply plugin: 'maven-publish'
-
 
 //--- Project information ---
 group = 'io.quintessent.jmeter'
 archivesBaseName = 'jmeter-gradle-plugin'
 
-ext.thisPluginVersion="1.1.2"
-ext.jmVersion = "5.0"
+ext.thisPluginVersion = "1.1.2"
+ext.jmVersion = "5.3"
 ext.jmPluginVersion = "1.4.0"
+ext.wdVersion = '3.3'
 version = "$thisPluginVersion-$jmVersion-SNAPSHOT"
 
 //--- Repositories ---
 repositories {
-    jcenter()
-    maven{ url 'https://repository.apache.org/content/repositories/releases'}
+    jcenter(){
+        metadataSources {
+            mavenPom()
+            ignoreGradleMetadataRedirection()
+        }
+    }
+    maven { url 'https://repository.apache.org/content/repositories/releases'
+        metadataSources {
+            mavenPom()
+            ignoreGradleMetadataRedirection()
+        }
+    }
 }
 
 //--- Dependencies ---
 configurations.all {
     resolutionStrategy {
-        force "org.codehaus.groovy:groovy-all:2.4.15"
+        force "org.codehaus.groovy:groovy-all:2.5.12"
     }
 }
 dependencies {
     compile gradleApi()
     compile 'xml-apis:xml-apis:1.4.01'
-    compile	'org.apache.ant:ant:1.10.5'
+    compile 'org.apache.ant:ant:1.10.8'
     compile	'org.rendersnake:rendersnake:1.9.0'
     compile	'org.beanshell:bsh-core:2.0b4'
     compile 'commons-httpclient:commons-httpclient:3.1'
@@ -47,37 +57,20 @@ dependencies {
     }
 
     //jm-plugins dependencies
-    compile("kg.apc:jmeter-plugins:${jmPluginVersion}"){
-        exclude group: 'commons-math3', module: 'commons-math3'
-        exclude group: 'commons-pool2', module: 'commons-pool2'
-        exclude group: 'xml-apis', module: 'xml-apis'
+    [
+            "kg.apc:jmeter-plugins:${jmPluginVersion}",
+            "kg.apc:jmeter-plugins-standard:${jmPluginVersion}",
+            "kg.apc:jmeter-plugins-extras:${jmPluginVersion}",
+            "kg.apc:jmeter-plugins-common:${jmPluginVersion}",
+            "kg.apc:jmeter-plugins-extras-libs:${jmPluginVersion}",
+            "kg.apc:jmeter-plugins-webdriver:${wdVersion}"
+    ].each {
+        compile(it) {
+            exclude group: 'commons-math3', module: 'commons-math3'
+            exclude group: 'commons-pool2', module: 'commons-pool2'
+            exclude group: 'xml-apis', module: 'xml-apis'
+        }
     }
-    compile("kg.apc:jmeter-plugins-standard:${jmPluginVersion}"){
-        exclude group: 'commons-math3', module: 'commons-math3'
-        exclude group: 'commons-pool2', module: 'commons-pool2'
-        exclude group: 'xml-apis', module: 'xml-apis'
-    }
-    compile("kg.apc:jmeter-plugins-extras:${jmPluginVersion}"){
-        exclude group: 'commons-math3', module: 'commons-math3'
-        exclude group: 'commons-pool2', module: 'commons-pool2'
-        exclude group: 'xml-apis', module: 'xml-apis'
-    }
-    compile("kg.apc:jmeter-plugins-common:${jmPluginVersion}"){
-        exclude group: 'commons-math3', module: 'commons-math3'
-        exclude group: 'commons-pool2', module: 'commons-pool2'
-        exclude group: 'xml-apis', module: 'xml-apis'
-    }
-    compile("kg.apc:jmeter-plugins-extras-libs:${jmPluginVersion}"){
-        exclude group: 'commons-math3', module: 'commons-math3'
-        exclude group: 'commons-pool2', module: 'commons-pool2'
-        exclude group: 'xml-apis', module: 'xml-apis'
-    }
-    compile("kg.apc:jmeter-plugins-webdriver:2.3"){
-        exclude group: 'commons-math3', module: 'commons-math3'
-        exclude group: 'commons-pool2', module: 'commons-pool2'
-        exclude group: 'xml-apis', module: 'xml-apis'
-    }
-
     //jm dependencies
     compile("org.apache.jmeter:ApacheJMeter_components:${jmVersion}")
     compile("org.apache.jmeter:ApacheJMeter_http:${jmVersion}")
@@ -93,22 +86,19 @@ dependencies {
     compile("org.apache.jmeter:ApacheJMeter_jms:${jmVersion}")
     compile("org.apache.jmeter:ApacheJMeter_config:${jmVersion}")
     compile("org.apache.jmeter:ApacheJMeter_junit:${jmVersion}")
-	compile("org.apache.jmeter:ApacheJMeter_components:${jmVersion}")
+    compile("org.apache.jmeter:ApacheJMeter_components:${jmVersion}")
     compile("org.apache.jmeter:ApacheJMeter_config:${jmVersion}")
-    compile("org.apache.jmeter:ApacheJMeter_junit-test:${jmVersion}")
+    compile("org.apache.jmeter:ApacheJMeter_junit:${jmVersion}")
     compile("org.apache.jmeter:ApacheJMeter_mongodb:${jmVersion}")
     compile("org.apache.jmeter:ApacheJMeter_native:${jmVersion}")
     compile("org.apache.jmeter:ApacheJMeter:${jmVersion}")
     compile("org.apache.jmeter:jorphan:${jmVersion}")
 
-	testCompile "junit:junit:4.12"
+    testCompile "junit:junit:4.13"
 }
 
 
 //--- Tasks ---
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.2'
-}
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
@@ -227,7 +217,7 @@ bintray {
                 user = 'userToken' //OSS user token
                 password = 'paasword' //OSS user password
                 close = '0' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by putting 0 as value) and release the version manually.
-            }            
+            }
         }
     }
 }
@@ -235,8 +225,18 @@ bintray {
 //--- gradle publishing ---
 //       for Releases
 publishPlugins.onlyIf {
-	!(version ==~ /.*SNAPSHOT/)
+    !(version ==~ /.*SNAPSHOT/)
 }
+
+gradlePlugin {
+    plugins {
+        jmeterPlugin {
+            id = group
+            implementationClass = 'io.quintessent.jmeter.gradle.plugins.JMPlugin'
+        }
+    }
+}
+
 pluginBundle {
     website = 'https://github.com/noelob/jmeter-gradle-plugin'
     vcsUrl = 'https://github.com/noelob/jmeter-gradle-plugin.git'
@@ -245,7 +245,7 @@ pluginBundle {
 
     plugins {
         jmeterPlugin {
-          id = 'io.quintessent.jmeter'
+            id = 'io.quintessent.jmeter'
           displayName = 'JMeter Gradle Plugin'
       }
     }
@@ -263,7 +263,7 @@ artifactory {
 		}
 
 		defaults {
-			publications('mavenJava')
+			//publications('mavenJava')
 		}
 	}
 	resolve {
@@ -273,4 +273,8 @@ artifactory {
 			password = System.getenv('bintray_api_key')
 		}
 	}
+}
+
+wrapper {
+    gradleVersion = '6.6'
 }
