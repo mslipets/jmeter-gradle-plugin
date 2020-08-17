@@ -245,7 +245,7 @@ pluginBundle {
 
     plugins {
         jmeterPlugin {
-            id = 'io.quintessent.jmeter'
+          id = 'io.quintessent.jmeter'
           displayName = 'JMeter Gradle Plugin'
       }
     }
@@ -263,7 +263,7 @@ artifactory {
 		}
 
 		defaults {
-			//publications('mavenJava')
+			publications('mavenJava')
 		}
 	}
 	resolve {
