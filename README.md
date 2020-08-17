@@ -5,6 +5,11 @@ For usage see: http://jmeter.foragerr.net/
 or [wiki](https://github.com/jmeter-gradle-plugin/jmeter-gradle-plugin/wiki/Getting-Started)
 
 ## News
+**17 Aug 2020**
+* Version 1.1.2 RC PR with support for JMeter 5.3
+* I have not extensively tested this release, caveat emptor
+
+## News
 **03 Dec 2019**
 * Version 1.1.1 released with support for JMeter 5.0
 * I have not extensively tested this release, caveat emptor
